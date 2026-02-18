@@ -1,0 +1,5 @@
+opensid/
+certs/
+db_data/
+.env
+*.log

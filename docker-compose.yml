@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    container_name: opensid-web
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./opensid:/var/www/html
+      - ./php/opensid.ini:/usr/local/etc/php/conf.d/opensid.ini
+      - ./apache/opensid.conf:/etc/apache2/sites-available/opensid.conf
+      - ./certs:/etc/apache2/ssl
+    environment:
+      APACHE_SERVER_NAME: ${DOMAIN}
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: mariadb:10.11
+    container_name: opensid-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: opensid-phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: ${DB_ROOT_PASSWORD}
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
