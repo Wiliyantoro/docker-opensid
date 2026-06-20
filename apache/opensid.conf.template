@@ -1,5 +1,14 @@
+<VirtualHost *:80>
+    ServerName ${DOMAIN}
+    DocumentRoot /var/www/html
+
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</VirtualHost>
+
 <VirtualHost *:443>
-    ServerName sid.kgwilly.my.id
+    ServerName ${DOMAIN}
     DocumentRoot /var/www/html
 
     SSLEngine on
@@ -10,16 +19,8 @@
 
     <Directory /var/www/html>
         Options FollowSymLinks
-        AllowOverride None
+        AllowOverride All
         Require all granted
-
-        RewriteEngine On
-
-        RewriteCond %{REQUEST_FILENAME} -f [OR]
-        RewriteCond %{REQUEST_FILENAME} -d
-        RewriteRule ^ - [L]
-
-        RewriteRule ^ index.php [L]
     </Directory>
 
     ErrorLog ${APACHE_LOG_DIR}/opensid_ssl_error.log

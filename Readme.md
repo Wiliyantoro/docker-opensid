@@ -2,13 +2,15 @@
 
 Konfigurasi Docker siap produksi untuk menjalankan **OpenSID** menggunakan:
 
-- 🐘 PHP 8.1 (Stabil untuk OpenSID)
-- 🌐 Apache + SSL
+- 🐍 PHP 8.4 (Latest OpenSID requirement)
+- 🔐 IonCube Loader 15 (Required)
+- 🌐 Apache + SSL + HTTP→HTTPS Redirect
 - 🗄️ MariaDB 10.11
 - 🐳 Docker Compose
-- 🔐 Dukungan HTTPS
 - 📦 phpMyAdmin
 - ⚙️ Installer interaktif (`setup.sh`)
+- ✅ Dynamic domain via envsubst
+- ✅ Health checks & service dependencies
 
 Repository ini hanya berisi konfigurasi Docker.  
 Source code OpenSID tetap diambil dari repository resmi atau repository pilihan Anda.

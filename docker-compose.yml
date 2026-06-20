@@ -9,13 +9,13 @@ services:
       - "443:443"
     volumes:
       - ./opensid:/var/www/html
-      - ./php/opensid.ini:/usr/local/etc/php/conf.d/opensid.ini
-      - ./apache/opensid.conf:/etc/apache2/sites-available/opensid.conf
+      - ./php/opensid.ini:/etc/php/8.4/apache2/conf.d/99-opensid.ini
       - ./certs:/etc/apache2/ssl
     environment:
-      APACHE_SERVER_NAME: ${DOMAIN}
+      DOMAIN: ${DOMAIN}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: always
 
   db:
@@ -29,6 +29,11 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   phpmyadmin:
     image: phpmyadmin:latest
